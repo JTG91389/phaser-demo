@@ -18,6 +18,8 @@ export class Player extends Actor {
         // PHYSICS
         this.getBody().setSize(30, 30);
         this.getBody().setOffset(8, 0);
+        // INit animations
+        this.initAnimations();
     }
     
     update(): void {
@@ -25,22 +27,45 @@ export class Player extends Actor {
         if  (this.body) {
             if (this.keyW?.isDown) {
                 this.body.velocity.y = -110;
+                !this.anims.isPlaying && this.anims.play('run', true);
             }
             if (this.keyA?.isDown) {
                 this.body.velocity.x = -110;
                 this.checkFlip();
                 // change render point of physical model(not sprite model) every time we chnage directions we have to account for a hit box miscalc error in phaser, so we manually reset offset
                 this.getBody().setOffset(48, 15);
+                !this.anims.isPlaying && this.anims.play('run', true);
             }
             if (this.keyS?.isDown) {
                 this.body.velocity.y = 110;
+                !this.anims.isPlaying && this.anims.play('run', true);
             }
             if (this.keyD?.isDown) {
                 this.body.velocity.x = 110;
                 this.checkFlip();
                 // change render point of physical model(not sprite model) every time we chnage directions we have to account for a hit box miscalc error in phaser, so we manually reset offset
                 this.getBody().setOffset(15, 15);
+                !this.anims.isPlaying && this.anims.play('run', true);
             }
         }
+    }
+
+    private initAnimations(): void {
+        this.scene.anims.create({
+            key: 'run',
+            frames: this.scene.anims.generateFrameNames('a-king', {
+                prefix: 'run-',
+                end: 7,
+            }),
+            frameRate: 8,
+        });
+        this.scene.anims.create({
+            key: 'attack',
+            frames: this.scene.anims.generateFrameNames('a-king', {
+                prefix: 'attack-',
+                end: 2,
+            }),
+            frameRate: 8,
+        });
     }
 }
