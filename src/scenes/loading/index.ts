@@ -22,6 +22,11 @@ export class LoadingScene extends Scene {
         this.load.image('king', 'sprites/king.png');    
         // this loads the king atlas, this means a-frames, our sprite animation sheets, see a-frames in assets, do et
         this.load.atlas('a-king', 'spritesheets/a-king.png', 'spritesheets/a-king_atlas.json');
-
+        // Loading tile maps
+        this.load.image({
+            key: 'tiles',
+            url: 'tilemaps/tiles/dungeon-16-16.png',
+        });
+        this.load.tilemapTiledJSON('dungeon', 'tilemaps/json/dungeon.json');
     }
 }
