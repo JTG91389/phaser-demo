@@ -1,6 +1,7 @@
 import { Scene, Tilemaps } from 'phaser';
 import { Player } from '../../classes/player';
 import { gameObjectsToObjectPoints } from '../../helpers/gameobject-to-object-point';
+import { EVENTS_NAME } from '../../consts';
 
 export class Level1 extends Scene {
     private player!: Player;
@@ -20,7 +21,7 @@ export class Level1 extends Scene {
         this.physics.add.collider(this.player, this.wallsLayer);
         // adding camera following agent, requires player to be present to init
         this.initCamera();
-        this.chests = this.initCollisionItems(this.map, this.player, { collectionName: 'Chests', objectName: 'ChestPoint', spriteId: 595, spriteType: 'tiles_spr'});
+        this.chests = this.initCollisionItems(this.map, this.player, { collectionName: 'Chests', objectName: 'ChestPoint', spriteId: 595, spriteType: 'tiles_spr'}, EVENTS_NAME.chestLoot);
         // this needs to go after player being created because the initChests depends on player to setup collision logic
     }
 
@@ -46,7 +47,7 @@ export class Level1 extends Scene {
         });
     }
 
-    private initCollisionItems(map: Tilemaps.Tilemap, player: Player, targetObject: TagetObject): Phaser.GameObjects.Sprite[] {
+    private initCollisionItems(map: Tilemaps.Tilemap, player: Player, targetObject: TagetObject, collisionEvent: EVENTS_NAME = null): Phaser.GameObjects.Sprite[] {
         let output: Phaser.GameObjects.Sprite[];
         const objectPoints = gameObjectsToObjectPoints(
             map.filterObjects(targetObject.collectionName, obj => obj.name === targetObject.objectName),
@@ -56,6 +57,7 @@ export class Level1 extends Scene {
         );
         output.forEach(chest => {
             this.physics.add.overlap(player, chest, (obj1, obj2) => {
+                this.game.events.emit(collisionEvent, [{score: 5}]);
                 obj2.destroy();
                 this.cameras.main.flash();
             });
