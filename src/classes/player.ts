@@ -1,12 +1,20 @@
 import { Actor } from './actor';
+import { Text } from './text';
+import { EVENTS_NAME, GameStatus } from '../../src/consts';
+
+import { Input, Scene } from 'phaser';
+
+// TODO: lets allow the player to block enemy attacks from a given direction
 
 export class Player extends Actor {
-    private keyW: Phaser.Input.Keyboard.Key|null = null;
-    private keyA: Phaser.Input.Keyboard.Key|null = null;
-    private keyS: Phaser.Input.Keyboard.Key|null = null;
-    private keyD: Phaser.Input.Keyboard.Key|null = null;
+    private keyW: Input.Keyboard.Key|null = null;
+    private keyA: Input.Keyboard.Key|null = null;
+    private keyS: Input.Keyboard.Key|null = null;
+    private keyD: Input.Keyboard.Key|null = null;
+    private keySpace: Input.Keyboard.Key|null = null;
+    private hpValue: Text;
 
-    constructor(scene: Phaser.Scene, x: number, y: number) {
+    constructor(scene: Scene, x: number, y: number) {
         super(scene, x, y, 'king');
         // KEYS
         if (this.scene?.input?.keyboard) {
@@ -20,6 +28,18 @@ export class Player extends Actor {
         this.getBody().setOffset(8, 0);
         // INit animations
         this.initAnimations();
+
+        // setup hp
+        this.hpValue = new Text(this.scene, this.x, this.y - this.height, this.hp.toString())
+            .setFontSize(12)
+            .setOrigin(0.8, 0.5);
+
+        // adding event listener for pressing space key(attack)
+        this.keySpace = this.scene.input.keyboard.addKey(32);
+        this.keySpace.on('down', (event: KeyboardEvent) => {
+            this.anims.play('attack', true);
+            this.scene.game.events.emit(EVENTS_NAME.attack);
+          });
     }
     
     update(): void {
@@ -47,6 +67,16 @@ export class Player extends Actor {
                 this.getBody().setOffset(15, 15);
                 !this.anims.isPlaying && this.anims.play('run', true);
             }
+        }
+        this.hpValue.setPosition(this.x, this.y - this.height * 0.4);
+        this.hpValue.setOrigin(0.8, 0.5);
+    }
+
+    public getDamage(value?: number): void {
+        super.getDamage(value);
+        this.hpValue.setText(this.hp.toString());
+        if (this.hp <= 0) {
+            this.scene.game.events.emit(EVENTS_NAME.gameEnd, GameStatus.LOSE);
         }
     }
 
