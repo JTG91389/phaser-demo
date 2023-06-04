@@ -39,7 +39,12 @@ export class Player extends Actor {
         this.keySpace.on('down', (event: KeyboardEvent) => {
             this.anims.play('attack', true);
             this.scene.game.events.emit(EVENTS_NAME.attack);
-          });
+        });
+
+        this.on('destroy', () => {
+            // remove listener from keySPace
+            this.keySpace.removeAllListeners();
+        });
     }
     
     update(): void {

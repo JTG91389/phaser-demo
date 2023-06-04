@@ -29,7 +29,7 @@ export class UIScene extends Scene {
                 this.game.scale.height * 0.4,
                 status === GameStatus.LOSE
                 ? `WASTED!\nSCORE: ${this.score.getValue()}\nCLICK TO RESTART`
-                : `YOU ARE ROCK!\nSCORE: ${this.score}sd\nCLICK TO RESTART`,
+                : `YOU ARE ROCK!\nSCORE: ${this.score.getValue()}\nCLICK TO RESTART`,
             )
                 .setAlign('center')
                 .setColor(status === GameStatus.LOSE ? '#ff0000' : '#ffffff');
@@ -37,6 +37,13 @@ export class UIScene extends Scene {
                 this.game.scale.width / 2 - this.gameEndPhrase.width / 2,
                 this.game.scale.height * 0.4,
             );
+            // turn off event listeners and restart game
+            this.input.on('pointerdown', () => {
+                this.game.events.off(EVENTS_NAME.chestLoot, this.chestLootHandler);
+                this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
+                this.scene.get('level-1-scene').scene.restart();
+                this.scene.restart();
+            });
         };
     }
 
