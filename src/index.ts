@@ -1,5 +1,5 @@
 import { Game, Types } from 'phaser';
-import { LoadingScene, Level1 } from './scenes';
+import { LoadingScene, Level1, UIScene } from './scenes';
 
 const gameConfig: Types.Core.GameConfig = {
     title: 'Phaser game tutorial',
@@ -31,10 +31,8 @@ const gameConfig: Types.Core.GameConfig = {
     audio: {
         disableWebAudio: false,
     },
-    scene: [LoadingScene, Level1],
+    scene: [LoadingScene, Level1, UIScene],
 };
-
-window.game = new Game(gameConfig);
 
 window.sizeChanged = () => {
     if (window.game.isBooted) {

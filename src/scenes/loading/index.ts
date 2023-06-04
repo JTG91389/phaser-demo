@@ -13,6 +13,7 @@ export class LoadingScene extends Scene {
      */
     create(): void {
         this.scene.start('level-1-scene');
+        this.scene.start('ui-scene');
     }
 
     preload(): void {
@@ -28,5 +29,11 @@ export class LoadingScene extends Scene {
             url: 'tilemaps/tiles/dungeon-16-16.png',
         });
         this.load.tilemapTiledJSON('dungeon', 'tilemaps/json/dungeon.json');
+
+        // CHEST LOADING
+        this.load.spritesheet('tiles_spr', 'tilemaps/tiles/dungeon-16-16.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+        });
     }
 }

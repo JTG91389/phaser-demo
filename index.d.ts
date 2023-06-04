@@ -1,9 +1,9 @@
 interface Window {
     sizeChanged: () => void;
     game: Phaser.Game;
-  }
+}
   
-  type ObjectPoint = {
+type ObjectPoint = {
     height: number;
     id: number;
     name: string;
@@ -14,4 +14,11 @@ interface Window {
     width: number;
     x: number;
     y: number;
-  };
+};
+
+type TagetObject = {
+    collectionName: string;
+    objectName: string;
+    spriteId: number;
+    spriteType: string;
+}
