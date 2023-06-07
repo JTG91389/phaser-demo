@@ -39,7 +39,9 @@ export class Level1 extends Scene {
         this.wallsLayer = this.map.createLayer('Walls', this.tileset, 0, 0);
         this.wallsLayer.setCollisionByProperty({ collides: true });
         this.physics.world.setBounds(0, 0, this.wallsLayer.width, this.wallsLayer.height);
-        this.showDebugWalls(this.wallsLayer);
+        if (this.physics.config.debug) {
+            this.showDebugWalls(this.wallsLayer);
+        }
     }
 
     private showDebugWalls(walls: Tilemaps.TilemapLayer): void {

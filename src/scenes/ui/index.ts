@@ -38,11 +38,18 @@ export class UIScene extends Scene {
                 this.game.scale.height * 0.4,
             );
             // turn off event listeners and restart game
+            // this.input.on('pointerdown', () => {
+            //     this.game.events.off(EVENTS_NAME.chestLoot, this.chestLootHandler);
+            //     this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
+            //     this.scene.get('level-1-scene').scene.restart();
+            //     this.scene.restart();
+            // });
             this.input.on('pointerdown', () => {
                 this.game.events.off(EVENTS_NAME.chestLoot, this.chestLootHandler);
                 this.game.events.off(EVENTS_NAME.gameEnd, this.gameEndHandler);
-                this.scene.get('level-1-scene').scene.restart();
-                this.scene.restart();
+                this.scene.get('shader-demo').scene.restart();
+                this.cameras.main.fadeOut(6000, 0, 0, 0);
+                this.scene.stop();
             });
         };
     }
@@ -55,5 +62,8 @@ export class UIScene extends Scene {
     private initListeners(): void {
         this.game.events.on(EVENTS_NAME.chestLoot, this.chestLootHandler, this);
         this.game.events.once(EVENTS_NAME.gameEnd, this.gameEndHandler, this);
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam: any, effect: any) => {
+            this.scene.start('shader-demo')
+        })
     }
 }
